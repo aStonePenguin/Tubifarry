@@ -55,6 +55,7 @@ namespace Tubifarry.Indexers.Soulseek
         string Artist,
         string Album,
         string Year,
+        bool IsExplicit,
         [property: JsonPropertyName("username")] string Username,
         [property: JsonPropertyName("hasFreeUploadSlot")] bool HasFreeUploadSlot,
         [property: JsonPropertyName("uploadSpeed")] long UploadSpeed,

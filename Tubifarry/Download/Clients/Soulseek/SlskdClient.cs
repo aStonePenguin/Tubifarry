@@ -126,7 +126,7 @@ namespace Tubifarry.Download.Clients.Soulseek
         {
             try
             {
-                string localPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(directoryPath)).FullPath;
+                string localPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(Path.Combine(Settings.DownloadPath, directoryPath))).FullPath;
                 await Task.Delay(1000);
                 HttpRequest request = BuildHttpRequest("/api/v0/transfers/downloads/");
                 HttpResponse response = await ExecuteAsync(request);
