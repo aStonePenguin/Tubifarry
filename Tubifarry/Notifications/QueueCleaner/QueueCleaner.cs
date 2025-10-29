@@ -68,17 +68,17 @@ namespace Tubifarry.Notifications.QueueCleaner
             switch (CheckImport(trackedDownload))
             {
                 case ImportFailureReason.FailedBecauseOfMissingTracks:
-                    HandleFailure(trackedDownload, Settings.ImportCleaningOption, ImportCleaningOptions.WhenMissingTracks);
+                    HandleFailure(trackedDownload, Settings.ImportCleaningOption, ImportCleaningOptions.WhenMissingTracks, ImportFailureReason.FailedBecauseOfMissingTracks);
                     break;
 
                 case ImportFailureReason.FailedBecauseOfInsufficientInformation:
-                    HandleFailure(trackedDownload, Settings.ImportCleaningOption, ImportCleaningOptions.WhenAlbumInfoIncomplete);
+                    HandleFailure(trackedDownload, Settings.ImportCleaningOption, ImportCleaningOptions.WhenAlbumInfoIncomplete, ImportFailureReason.FailedBecauseOfInsufficientInformation);
                     break;
 
                 case ImportFailureReason.Both:
                     if (Settings.ImportCleaningOption == (int)ImportCleaningOptions.Disabled)
                         break;
-                    HandleFailure(trackedDownload, Settings.ImportCleaningOption, ImportCleaningOptions.Always);
+                    HandleFailure(trackedDownload, Settings.ImportCleaningOption, ImportCleaningOptions.Always, ImportFailureReason.Both);
                     break;
 
                 case ImportFailureReason.DidNotFail:
@@ -86,7 +86,7 @@ namespace Tubifarry.Notifications.QueueCleaner
             }
         }
 
-        private void HandleFailure(TrackedDownload trackedDownload, int importCleaningOption, ImportCleaningOptions requiredOption)
+        private void HandleFailure(TrackedDownload trackedDownload, int importCleaningOption, ImportCleaningOptions requiredOption, ImportFailureReason failureReason)
         {
             if (importCleaningOption != (int)requiredOption && importCleaningOption != (int)ImportCleaningOptions.Always)
                 return;
@@ -101,7 +101,7 @@ namespace Tubifarry.Notifications.QueueCleaner
             if (Settings.BlocklistOption == (int)BlocklistOptions.RemoveAndBlocklist || Settings.BlocklistOption == (int)BlocklistOptions.BlocklistOnly)
                 Blocklist(trackedDownload);
 
-            if (Settings.ImportPartialReleases)
+            if (Settings.ImportPartialReleases && failureReason == ImportFailureReason.FailedBecauseOfMissingTracks)
             {
                 ForceImport(trackedDownload);
                 return;
