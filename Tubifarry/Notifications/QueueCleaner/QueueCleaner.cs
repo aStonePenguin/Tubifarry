@@ -33,7 +33,7 @@ namespace Tubifarry.Notifications.QueueCleaner
 
         public override string Link => "";
 
-        public override ProviderMessage Message => new("Queue Cleaner automatically processes items that failed to import. It can rename, blocklist, or remove items based on your settings.", ProviderMessageType.Info);
+        public override ProviderMessage Message => new("Queue Cleaner automatically processes items that failed to import. It can rename, blocklist, partially import, or remove items based on your settings.", ProviderMessageType.Info);
 
         public QueueCleaner(IDiskProvider diskProvider, IHistoryService historyService, INamingConfigService namingConfig, IEventAggregator eventAggregator, IIndexerFactory indexerFactory, ICompletedDownloadService completedDownloadService, Logger logger)
         {
@@ -100,6 +100,12 @@ namespace Tubifarry.Notifications.QueueCleaner
 
             if (Settings.BlocklistOption == (int)BlocklistOptions.RemoveAndBlocklist || Settings.BlocklistOption == (int)BlocklistOptions.BlocklistOnly)
                 Blocklist(trackedDownload);
+
+            if (Settings.ImportPartialReleases)
+            {
+                ForceImport(trackedDownload);
+                return;
+            }
 
             if (Settings.BlocklistOption == (int)BlocklistOptions.RemoveAndBlocklist || Settings.BlocklistOption == (int)BlocklistOptions.RemoveOnly)
                 Remove(trackedDownload);
@@ -216,6 +222,12 @@ namespace Tubifarry.Notifications.QueueCleaner
         private void Retry(TrackedDownload item)
         {
             item.State = TrackedDownloadState.ImportPending;
+            _completedDownloadService.Import(item);
+        }
+
+        private void ForceImport(TrackedDownload item)
+        {
+            item.State = TrackedDownloadState.Importing;
             _completedDownloadService.Import(item);
         }
 

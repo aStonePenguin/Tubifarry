@@ -20,10 +20,13 @@ namespace Tubifarry.Notifications.Queue
         [FieldDefinition(3, Label = "Import Cleaning Option", Type = FieldType.Select, SelectOptions = typeof(ImportCleaningOptions), HelpText = "Specify how to handle import cleaning during queue cleaning.")]
         public int ImportCleaningOption { get; set; } = (int)ImportCleaningOptions.Always;
 
-        [FieldDefinition(4, Label = "Retry Finding Release", Type = FieldType.Checkbox, HelpText = "Retry searching for the release if the import fails during queue cleaning.")]
+        [FieldDefinition(4, Label = "Import Partal Releases", Type = FieldType.Checkbox, HelpText = "Import partial releases when possible.")]
+        public bool ImportPartialReleases { get; set; } = false;
+
+        [FieldDefinition(5, Label = "Retry Finding Release", Type = FieldType.Checkbox, HelpText = "Retry searching for the release if the import fails during queue cleaning.")]
         public bool RetryFindingRelease { get; set; } = true;
 
-        [FieldDefinition(5, Label = "Indexers", Type = FieldType.Tag, HelpText = "Names of indexers to watch. Leave empty to use all available indexers.")]
+        [FieldDefinition(6, Label = "Indexers", Type = FieldType.Tag, HelpText = "Names of indexers to watch. Leave empty to use all available indexers.")]
         public IEnumerable<string> Indexers { get; set; } = [];
 
         public NzbDroneValidationResult Validate() => new(Validator.Validate(this));
