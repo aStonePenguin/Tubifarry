@@ -117,7 +117,8 @@ The **Queue Cleaner** automatically handles downloads that fail to import into y
 1. **Key Options**:  
    - *Blocklist*: Choose to remove, blocklist, or both for failed imports.  
    - *Rename*: Automatically rename album folders and tracks using available metadata.  
-   - *Clean Imports*: Decide when to clean—when tracks are missing, metadata is incomplete, or always.  
+   - *Clean Imports*: Decide when to clean—when tracks are missing, metadata is incomplete, or always.
+   - *Import Incomplete Releases* Automatically import releases which are missing files.
    - *Retry Finding Release*: Automatically retry searching for a release if the import fails.  
 
 2. **How to Enable**:  
