@@ -101,10 +101,15 @@ namespace Tubifarry.Notifications.QueueCleaner
             if (Settings.BlocklistOption == (int)BlocklistOptions.RemoveAndBlocklist || Settings.BlocklistOption == (int)BlocklistOptions.BlocklistOnly)
                 Blocklist(trackedDownload);
 
+
             if (Settings.ImportPartialReleases && failureReason == ImportFailureReason.FailedBecauseOfMissingTracks)
             {
-                ForceImport(trackedDownload);
-                return;
+                bool onlyHasMissingTracks = trackedDownload.StatusMessages
+                    .All(sm => sm.Messages.All(m => m == "Has missing tracks"));
+
+                if (onlyHasMissingTracks)
+                    ForceImport(trackedDownload);
+                    return;
             }
 
             if (Settings.BlocklistOption == (int)BlocklistOptions.RemoveAndBlocklist || Settings.BlocklistOption == (int)BlocklistOptions.RemoveOnly)
